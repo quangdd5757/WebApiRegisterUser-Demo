@@ -28,6 +28,7 @@ namespace WebApiRegisterUser_Demo.Commons
             MailAddress from = new MailAddress(mailFrom);
             MailAddress to = new MailAddress(mailTo);
             MailMessage message = new MailMessage(from, to);
+            message.Subject = "[Demo] Please verify your email";
             string htmlString = @"<html>
                       <body>
                       <p>Dear friend,</p>
