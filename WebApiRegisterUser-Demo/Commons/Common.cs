@@ -1,4 +1,7 @@
-﻿namespace WebApiRegisterUser_Demo.Commons
+﻿using System.Net;
+using System.Net.Mail;
+
+namespace WebApiRegisterUser_Demo.Commons
 {
     public class Common
     {
@@ -20,8 +23,38 @@
             return code;
         }
 
-        public static bool SendMailRegisterCode(string code)
+        public static bool SendMailRegisterCode(string code, string mailFrom, string mailFromPass, string mailTo)
         {
+            MailAddress from = new MailAddress(mailFrom);
+            MailAddress to = new MailAddress(mailTo);
+            MailMessage message = new MailMessage(from, to);
+            string htmlString = @"<html>
+                      <body>
+                      <p>Dear friend,</p>
+                      <p>We received a new registration request. Please use this registration code to complete the authentication: <strong>{0}</strong></p>
+                      <p>Thank you,</br></p>
+                      </body>
+                      </html>
+                     ";
+            message.IsBodyHtml = true;
+            message.Body = string.Format(htmlString, code);
+
+            SmtpClient client = new SmtpClient()
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                Credentials = new NetworkCredential(mailFrom, mailFromPass),
+                EnableSsl = true
+            };
+            try
+            {
+                client.Send(message);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
             return true;
         }
     }

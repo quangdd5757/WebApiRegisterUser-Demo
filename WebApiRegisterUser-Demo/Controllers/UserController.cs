@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 using WebApiRegisterUser_Demo.Commons;
 using WebApiRegisterUser_Demo.Models;
@@ -14,11 +15,13 @@ namespace WebApiRegisterUser_Demo.Controllers
     {
         private readonly UserService _userService;
         private readonly RegisterCodeService _registerCodeService;
+        private readonly Config _config;
 
-        public UserController(UserService userService, RegisterCodeService registerCodeService)
+        public UserController(UserService userService, RegisterCodeService registerCodeService, IOptions<Config> config)
         {
             _userService = userService;
             _registerCodeService = registerCodeService;
+            _config = config.Value;
         }
 
         [HttpPost("Register")]
@@ -37,7 +40,7 @@ namespace WebApiRegisterUser_Demo.Controllers
             // generate code
             var code = Common.RandomCode(10);
             // send mail
-            if (!Common.SendMailRegisterCode(code))
+            if (!Common.SendMailRegisterCode(code, _config.MailSend, _config.MailSendPass, user.email))
             {
                 return Ok(new Responce()
                 {

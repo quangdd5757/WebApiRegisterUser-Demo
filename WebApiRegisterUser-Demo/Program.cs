@@ -4,7 +4,7 @@ using WebApiRegisterUser_Demo.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<DataUserConfig>(builder.Configuration.GetSection("DataUserConfig"));
+builder.Services.Configure<Config>(builder.Configuration.GetSection("Config"));
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
 builder.Services.AddSingleton<UserService>();

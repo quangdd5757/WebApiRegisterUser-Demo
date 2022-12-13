@@ -68,7 +68,7 @@ namespace WebApiRegisterUser_Demo.Services
         private readonly string _fileDataUsers;
 
         public ConsumeScopedServiceHostedService(IServiceProvider services,
-            ILogger<ConsumeScopedServiceHostedService> logger, IOptions<MongoDBSettings> mongoDBSettings, IOptions<DataUserConfig> dataUserConfig, UserService userService)
+            ILogger<ConsumeScopedServiceHostedService> logger, IOptions<MongoDBSettings> mongoDBSettings, IOptions<Config> config, UserService userService)
         {
             Services = services;
             _logger = logger;
@@ -78,7 +78,7 @@ namespace WebApiRegisterUser_Demo.Services
             _usersCollection = database.GetCollection<UserService>(mongoDBSettings.Value.CollectionUsers);
             _userService = userService;
             // get path file data users
-            _fileDataUsers = dataUserConfig.Value.PathFile;
+            _fileDataUsers = config.Value.PathFileDataUser;
         }
 
         public IServiceProvider Services { get; }
